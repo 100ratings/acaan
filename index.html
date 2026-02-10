@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tamariz Trainer</title>
+    <title>ACAAN Trainer</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -13,8 +13,8 @@
             <div class="left-column">
                 <!-- Header -->
                 <div class="header">
-                    <h1 class="title">Tamariz Trainer</h1>
-                    <p class="subtitle">Treino da mnemônica de Tamariz</p>
+                    <h1 class="title">ACAAN Trainer</h1>
+                    <p class="subtitle">Treino de ACAAN (Tamariz Stack)</p>
                 </div>
 
                 <!-- Progress -->
@@ -55,37 +55,55 @@
             <div class="right-column">
                 <!-- Flashcard -->
                 <div id="flashcardContainer" class="flashcard-container">
-                    <div class="flashcard">
-                        <div class="card-display">
-                            <div id="cardEmoji" class="card-emoji">4♣</div>
-                            <div id="cardName" class="card-name">4 de Paus</div>
+                    <div class="main-layout">
+                        <div class="main-panel">
+                            <!-- Playing Card Look -->
+                            <div class="flashcard playing-card">
+                                <div class="card-corner card-corner-top">
+                                    <div id="cardEmojiCornerTop" class="card-corner-emoji">4♣</div>
+                                </div>
+
+                                <div class="card-center">
+                                    <div id="cardEmoji" class="card-emoji">4♣</div>
+                                    <div id="cardName" class="card-name">4 de Paus</div>
+                                </div>
+
+                                <div class="card-position-badge">
+                                    <span class="badge-label">Posição</span>
+                                    <span id="numberDisplay" class="badge-value">1</span>
+                                </div>
+
+                                <div class="card-corner card-corner-bottom">
+                                    <div id="cardEmojiCornerBottom" class="card-corner-emoji">4♣</div>
+                                </div>
+                            </div>
+
+                            <!-- Peek Button -->
+                            <button id="peekBtn" class="peek-btn">
+                                <span class="peek-icon">👁️</span>
+                                <span id="peekBtnText">Onde Cortar?</span>
+                            </button>
+
+                            <!-- Next Button -->
+                            <button id="nextBtn" class="next-btn">
+                                Próxima Carta
+                                <span class="next-icon">→</span>
+                            </button>
                         </div>
-                        <div id="numberDisplay" class="number-display">1</div>
-                    </div>
 
-                    <!-- Peek Button -->
-                    <button id="peekBtn" class="peek-btn">
-                        <span class="peek-icon">👁️</span>
-                        <span id="peekBtnText">Ver Resposta</span>
-                    </button>
-
-                    <!-- Answer -->
-                    <div id="answerContainer" class="answer-container hidden">
-                        <div class="answer-box">
-                            <div class="answer-label">Você deveria cortar em:</div>
-                            <div id="correctCardEmoji" class="correct-card-emoji">4♣</div>
-                            <div id="correctCardName" class="correct-card-name">4 de Paus</div>
-                            <div class="answer-position">
-                                Posição: <span id="correctPosition" class="position-value">1</span>
+                        <div class="side-panel">
+                            <div id="answerContainer" class="answer-container hidden">
+                                <div class="answer-box">
+                                    <div class="answer-label">Você deveria cortar em:</div>
+                                    <div id="correctCardEmoji" class="correct-card-emoji">4♣</div>
+                                    <div id="correctCardName" class="correct-card-name">4 de Paus</div>
+                                    <div class="answer-position">
+                                        Posição: <span id="correctPosition" class="position-value">1</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Next Button -->
-                    <button id="nextBtn" class="next-btn">
-                        Próxima Carta
-                        <span class="next-icon">→</span>
-                    </button>
                 </div>
 
                 <!-- Loading State -->

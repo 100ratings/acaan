@@ -64,6 +64,8 @@ const elements = {
     
     
     cardEmoji: document.getElementById("cardEmoji"),
+    cardEmojiCornerTop: document.getElementById("cardEmojiCornerTop"),
+    cardEmojiCornerBottom: document.getElementById("cardEmojiCornerBottom"),
     cardName: document.getElementById("cardName"),
     numberDisplay: document.getElementById("numberDisplay"),
     
@@ -181,8 +183,15 @@ function updateUI() {
     if (!state.currentCard) return;
     
     elements.cardEmoji.textContent = state.currentCard;
+    elements.cardEmojiCornerTop.textContent = state.currentCard;
+    elements.cardEmojiCornerBottom.textContent = state.currentCard;
+    
     const isRed = state.currentCard.includes('♥') || state.currentCard.includes('♦');
-    elements.cardEmoji.style.color = isRed ? 'var(--suit-red)' : 'var(--suit-black)';
+    const suitColor = isRed ? 'var(--suit-red)' : 'var(--suit-black)';
+    
+    elements.cardEmoji.style.color = suitColor;
+    elements.cardEmojiCornerTop.style.color = suitColor;
+    elements.cardEmojiCornerBottom.style.color = suitColor;
     
     elements.cardName.textContent = getCardName(state.currentCard);
     elements.numberDisplay.textContent = state.currentPosition;
@@ -201,7 +210,7 @@ function updateUI() {
     state.showAnswer = false;
     elements.answerContainer.classList.add("hidden");
     elements.peekBtn.classList.remove("active");
-    elements.peekBtnText.textContent = "Ver Resposta";
+    elements.peekBtnText.textContent = "Onde Cortar?";
 }
 
 function generateNewFlashCard() {
@@ -372,11 +381,11 @@ elements.peekBtn.addEventListener("click", () => {
     if (state.showAnswer) {
         elements.answerContainer.classList.remove("hidden");
         elements.peekBtn.classList.add("active");
-        elements.peekBtnText.textContent = "Esconder Resposta";
+        elements.peekBtnText.textContent = "Esconder";
     } else {
         elements.answerContainer.classList.add("hidden");
         elements.peekBtn.classList.remove("active");
-        elements.peekBtnText.textContent = "Ver Resposta";
+        elements.peekBtnText.textContent = "Onde Cortar?";
     }
 });
 
@@ -418,11 +427,11 @@ function setAnswerVisible(visible) {
     if (visible) {
         elements.answerContainer.classList.remove("hidden");
         elements.peekBtn.classList.add("active");
-        elements.peekBtnText.textContent = "Esconder Resposta";
+        elements.peekBtnText.textContent = "Esconder";
     } else {
         elements.answerContainer.classList.add("hidden");
         elements.peekBtn.classList.remove("active");
-        elements.peekBtnText.textContent = "Ver Resposta";
+        elements.peekBtnText.textContent = "Onde Cortar?";
     }
 }
 
