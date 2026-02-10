@@ -9,111 +9,133 @@
 <body>
     <div id="app">
         <div class="container">
-            <!-- Header -->
-            <div class="header">
-                <h1 class="title">Tamariz Trainer</h1>
-                <p class="subtitle">Treino da mnemônica de Tamariz</p>
-            </div>
-
-            <!-- Progress -->
-            <div class="progress-card">
-                <div class="progress-header">
-                    <span class="progress-label">Progresso</span>
-                    <span class="progress-count"><span id="totalUsed">0</span> / <span id="totalAvailable">2704</span></span>
+            <!-- Coluna Esquerda (Controles e Info) -->
+            <div class="left-column">
+                <!-- Header -->
+                <div class="header">
+                    <h1 class="title">Tamariz Trainer</h1>
+                    <p class="subtitle">Treino da mnemônica de Tamariz</p>
                 </div>
-                <div class="progress-bar-container">
-                    <div id="progressBar" class="progress-bar" style="width: 0%"></div>
+
+                <!-- Progress -->
+                <div class="progress-card">
+                    <div class="progress-header">
+                        <span class="progress-label">Progresso</span>
+                        <span class="progress-count"><span id="totalUsed">0</span> / <span id="totalAvailable">2704</span></span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div id="progressBar" class="progress-bar" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-percentage" id="progressPercentage">0% concluído</div>
                 </div>
-                <div class="progress-percentage" id="progressPercentage">0% concluído</div>
+
+                <!-- Card Selector Trigger -->
+                <div class="card-selector-wrapper">
+                    <button id="cardSelectorBtn" class="card-selector-btn">
+                        <span class="selector-icon">🎴</span>
+                        <span>Topo: <span id="topCardDisplay">4♣</span></span>
+                    </button>
+                </div>
+
+                <!-- Footer / Info (Movido para esquerda no desktop) -->
+                <div class="footer-group">
+                    <div class="footer">
+                        <button id="resetFooterBtn" class="reset-footer-btn">
+                            <span class="reset-icon">↻</span>
+                            Resetar Tudo
+                        </button>
+                    </div>
+                    <div class="info">
+                        <p>Treino da mnemônica de Tamariz • 2704 combinações</p>
+                    </div>
+                </div>
             </div>
 
-            <!-- Card Selector -->
-            <div class="card-selector-wrapper">
-                <button id="cardSelectorBtn" class="card-selector-btn">
-                    <span class="selector-icon">🎴</span>
-                    <span>Topo: <span id="topCardDisplay">4♣</span></span>
-                </button>
+            <!-- Coluna Direita (Flashcard) -->
+            <div class="right-column">
+                <!-- Flashcard -->
+                <div id="flashcardContainer" class="flashcard-container">
+                    <div class="flashcard">
+                        <div class="card-display">
+                            <div id="cardEmoji" class="card-emoji">4♣</div>
+                            <div id="cardName" class="card-name">4 de Paus</div>
+                        </div>
+                        <div id="numberDisplay" class="number-display">1</div>
+                    </div>
+
+                    <!-- Peek Button -->
+                    <button id="peekBtn" class="peek-btn">
+                        <span class="peek-icon">👁️</span>
+                        <span id="peekBtnText">Ver Resposta</span>
+                    </button>
+
+                    <!-- Answer -->
+                    <div id="answerContainer" class="answer-container hidden">
+                        <div class="answer-box">
+                            <div class="answer-label">Você deveria cortar em:</div>
+                            <div id="correctCardEmoji" class="correct-card-emoji">4♣</div>
+                            <div id="correctCardName" class="correct-card-name">4 de Paus</div>
+                            <div class="answer-position">
+                                Posição: <span id="correctPosition" class="position-value">1</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Next Button -->
+                    <button id="nextBtn" class="next-btn">
+                        Próxima Carta
+                        <span class="next-icon">→</span>
+                    </button>
+                </div>
+
+                <!-- Loading State -->
+                <div id="loadingContainer" class="loading-container hidden">
+                    <div class="loading-box">
+                        <div class="loading-title">Carregando...</div>
+                        <p class="loading-text">Gerando próxima carta...</p>
+                    </div>
+                </div>
+
+                <!-- Completion State -->
+                <div id="completionContainer" class="completion-container hidden">
+                    <div class="completion-box">
+                        <div class="completion-emoji">🎉</div>
+                        <div class="completion-title">Parabéns!</div>
+                        <p class="completion-text">Você completou todas as combinações!</p>
+                        <button id="resetBtn" class="reset-btn">
+                            <span class="reset-icon">↻</span>
+                            Resetar Progresso
+                        </button>
+                    </div>
+                </div>
             </div>
 
-            <!-- Card Selector Modal -->
+            <!-- Card Selector Modal (Novo Layout) -->
             <div id="cardModal" class="modal hidden">
                 <div class="modal-overlay" id="modalOverlay"></div>
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h2>Selecione a Carta do Topo</h2>
+                        <h2>Seletor de Cartas</h2>
                         <button class="modal-close" id="modalCloseBtn">✕</button>
                     </div>
-                    <div id="cardGrid" class="card-grid"></div>
-                </div>
-            </div>
-
-            <!-- Flashcard -->
-            <div id="flashcardContainer" class="flashcard-container">
-                <div class="flashcard">
-                    <div class="card-display">
-                        <div id="cardEmoji" class="card-emoji">4♣</div>
-                        <div id="cardName" class="card-name">4 de Paus</div>
-                    </div>
-                    <div id="numberDisplay" class="number-display">1</div>
-                </div>
-
-                <!-- Peek Button -->
-                <button id="peekBtn" class="peek-btn">
-                    <span class="peek-icon">👁️</span>
-                    <span id="peekBtnText">Ver Resposta</span>
-                </button>
-
-                <!-- Answer -->
-                <div id="answerContainer" class="answer-container hidden">
-                    <div class="answer-box">
-                        <div class="answer-label">Você deveria cortar em:</div>
-                        <div id="correctCardEmoji" class="correct-card-emoji">4♣</div>
-                        <div id="correctCardName" class="correct-card-name">4 de Paus</div>
-                        <div class="answer-position">
-                            Posição: <span id="correctPosition" class="position-value">1</span>
+                    
+                    <!-- Novo Seletor -->
+                    <div class="selector-container">
+                        <div class="selector-display">
+                            <span id="selectorPreview" class="selector-preview-text">---</span>
+                        </div>
+                        
+                        <div class="selector-group">
+                            <div class="selector-label">VALOR</div>
+                            <div id="rankGrid" class="rank-grid"></div>
+                        </div>
+                        
+                        <div class="selector-group">
+                            <div class="selector-label">NAIPE</div>
+                            <div id="suitGrid" class="suit-grid"></div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Next Button -->
-                <button id="nextBtn" class="next-btn">
-                    Próxima Carta
-                    <span class="next-icon">→</span>
-                </button>
-            </div>
-
-            <!-- Loading State -->
-            <div id="loadingContainer" class="loading-container hidden">
-                <div class="loading-box">
-                    <div class="loading-title">Carregando...</div>
-                    <p class="loading-text">Gerando próxima carta...</p>
-                </div>
-            </div>
-
-            <!-- Completion State -->
-            <div id="completionContainer" class="completion-container hidden">
-                <div class="completion-box">
-                    <div class="completion-emoji">🎉</div>
-                    <div class="completion-title">Parabéns!</div>
-                    <p class="completion-text">Você completou todas as combinações!</p>
-                    <button id="resetBtn" class="reset-btn">
-                        <span class="reset-icon">↻</span>
-                        Resetar Progresso
-                    </button>
-                </div>
-            </div>
-
-            <!-- Reset Button (Footer) -->
-            <div class="footer">
-                <button id="resetFooterBtn" class="reset-footer-btn">
-                    <span class="reset-icon">↻</span>
-                    Resetar Tudo
-                </button>
-            </div>
-
-            <!-- Info -->
-            <div class="info">
-                <p>Treino da mnemônica de Tamariz • 2704 combinações possíveis</p>
             </div>
         </div>
     </div>

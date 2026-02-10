@@ -58,7 +58,9 @@ const elements = {
     cardModal: document.getElementById("cardModal"),
     modalCloseBtn: document.getElementById("modalCloseBtn"),
     modalOverlay: document.getElementById("modalOverlay"),
-    cardGrid: document.getElementById("cardGrid"),
+    rankGrid: document.getElementById("rankGrid"),
+    suitGrid: document.getElementById("suitGrid"),
+    selectorPreview: document.getElementById("selectorPreview"),
     
     
     cardEmoji: document.getElementById("cardEmoji"),
@@ -251,30 +253,69 @@ function showCompletion() {
 
 function openCardModal() {
     elements.cardModal.classList.remove("hidden");
-    renderCardGrid();
+    renderCardSelector();
 }
 
 function closeCardModal() {
     elements.cardModal.classList.add("hidden");
 }
 
-function renderCardGrid() {
-    elements.cardGrid.innerHTML = "";
+// Estado temporário do seletor
+let selectorState = {
+    rank: null,
+    suit: null
+};
+
+const RANKS = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+const SUITS = ["♠", "♥", "♣", "♦"];
+
+function renderCardSelector() {
+    // Resetar estado ao abrir
+    selectorState = { rank: null, suit: null };
+    updateSelectorPreview();
     
-    TAMARIZ_STACK.forEach(card => {
-        const btn = document.createElement("div");
-        btn.className = "card-grid-item";
-        if (card === state.topCard) {
-            btn.classList.add("selected");
-        }
+    // Renderizar Ranks
+    elements.rankGrid.innerHTML = "";
+    RANKS.forEach(rank => {
+        const btn = document.createElement("button");
+        btn.className = "selector-btn";
+        btn.textContent = rank;
+        btn.addEventListener("click", () => handleSelectorClick('rank', rank, btn));
+        elements.rankGrid.appendChild(btn);
+    });
+
+    // Renderizar Naipes
+    elements.suitGrid.innerHTML = "";
+    SUITS.forEach(suit => {
+        const btn = document.createElement("button");
+        btn.className = "selector-btn";
+        btn.textContent = suit;
+        if (suit === "♥" || suit === "♦") btn.style.color = "#ef4444"; // Vermelho
+        btn.addEventListener("click", () => handleSelectorClick('suit', suit, btn));
+        elements.suitGrid.appendChild(btn);
+    });
+}
+
+function handleSelectorClick(type, value, btnElement) {
+    // Atualizar estado
+    selectorState[type] = value;
+    
+    // Atualizar UI (classe selected)
+    const parent = type === 'rank' ? elements.rankGrid : elements.suitGrid;
+    Array.from(parent.children).forEach(child => child.classList.remove("selected"));
+    btnElement.classList.add("selected");
+    
+    updateSelectorPreview();
+
+    // Verificar se ambos foram selecionados
+    if (selectorState.rank && selectorState.suit) {
+        const builtCard = `${selectorState.rank}${selectorState.suit}`;
         
-        btn.innerHTML = `
-            <div class="card-emoji">${card}</div>
-            <div class="card-label">${getCardName(card)}</div>
-        `;
-        
-        btn.addEventListener("click", () => {
-            state.topCard = card;
+        // Validar se existe na stack (segurança)
+        if (TAMARIZ_STACK.includes(builtCard)) {
+            // Pequeno delay para o usuário ver o clique visualmente
+            setTimeout(() => {
+                state.topCard = builtCard;
             state.currentCard = null;
             state.showAnswer = false;
             
@@ -282,10 +323,33 @@ function renderCardGrid() {
             
             closeCardModal();
             generateNewFlashCard();
-        });
-        
-        elements.cardGrid.appendChild(btn);
-    });
+            }, 150);
+        }
+    }
+}
+
+function updateSelectorPreview() {
+    if (selectorState.rank && selectorState.suit) {
+        elements.selectorPreview.textContent = `${selectorState.rank}${selectorState.suit}`;
+        if (selectorState.suit === "♥" || selectorState.suit === "♦") {
+            elements.selectorPreview.style.color = "#ef4444";
+        } else {
+            elements.selectorPreview.style.color = "var(--primary)";
+        }
+    } else if (selectorState.rank) {
+        elements.selectorPreview.textContent = `${selectorState.rank} ?`;
+        elements.selectorPreview.style.color = "var(--text-light)";
+    } else if (selectorState.suit) {
+        elements.selectorPreview.textContent = `? ${selectorState.suit}`;
+        if (selectorState.suit === "♥" || selectorState.suit === "♦") {
+            elements.selectorPreview.style.color = "#ef4444";
+        } else {
+            elements.selectorPreview.style.color = "var(--text-dark)";
+        }
+    } else {
+        elements.selectorPreview.textContent = "---";
+        elements.selectorPreview.style.color = "var(--text-light)";
+    }
 }
 
 // ============================================================================
@@ -339,6 +403,9 @@ elements.resetFooterBtn.addEventListener("click", () => {
 // ============================================================================
 
 function init() {
+    // Prevenir zoom por duplo clique
+    document.addEventListener('dblclick', (e) => { e.preventDefault(); }, { passive: false });
+    
     loadState();
     updateProgress();
     generateNewFlashCard();
