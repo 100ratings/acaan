@@ -405,6 +405,70 @@ elements.resetFooterBtn.addEventListener("click", () => {
 });
 
 // ============================================================================
+// Keyboard: Space tap = next | Space hold = peek
+// ============================================================================
+
+let spaceDown = false;
+let spaceHoldTimer = null;
+let peekActiveByHold = false;
+const HOLD_MS = 250;
+
+function setAnswerVisible(visible) {
+    state.showAnswer = visible;
+    if (visible) {
+        elements.answerContainer.classList.remove("hidden");
+        elements.peekBtn.classList.add("active");
+        elements.peekBtnText.textContent = "Esconder Resposta";
+    } else {
+        elements.answerContainer.classList.add("hidden");
+        elements.peekBtn.classList.remove("active");
+        elements.peekBtnText.textContent = "Ver Resposta";
+    }
+}
+
+function isModalOpen() {
+    return !elements.cardModal.classList.contains("hidden");
+}
+
+document.addEventListener("keydown", (e) => {
+    if (e.code !== "Space") return;
+    if (isModalOpen()) return;
+    if (e.repeat) return;
+
+    e.preventDefault();
+
+    spaceDown = true;
+    peekActiveByHold = false;
+
+    spaceHoldTimer = setTimeout(() => {
+        if (!spaceDown) return;
+        peekActiveByHold = true;
+        setAnswerVisible(true);
+    }, HOLD_MS);
+}, { passive: false });
+
+document.addEventListener("keyup", (e) => {
+    if (e.code !== "Space") return;
+    if (isModalOpen()) return;
+
+    e.preventDefault();
+
+    spaceDown = false;
+
+    if (spaceHoldTimer) {
+        clearTimeout(spaceHoldTimer);
+        spaceHoldTimer = null;
+    }
+
+    if (peekActiveByHold) {
+        setAnswerVisible(false);
+        peekActiveByHold = false;
+    } else {
+        generateNewFlashCard();
+    }
+}, { passive: false });
+
+// ============================================================================
 // Initialization
 // ============================================================================
 
