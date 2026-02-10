@@ -105,14 +105,13 @@ function getCardPosition(card, topCard) {
 
 function getCorrectCard(displayedCard, position, topCard) {
     const displayedCardIndex = TAMARIZ_STACK.indexOf(displayedCard);
-    const topCardIndex = TAMARIZ_STACK.indexOf(topCard);
+    const cardNum = displayedCardIndex + 1;
     
-    const offset = topCardIndex;
-    const correctCardIndex = (displayedCardIndex - offset + 52) % 52;
-    const correctCard = TAMARIZ_STACK[correctCardIndex];
-    const correctPosition = correctCardIndex + 1;
+    let peekNum = cardNum - position;
+    if (peekNum <= 0) peekNum += 52;
     
-    return { card: correctCard, position: correctPosition };
+    const peekCard = TAMARIZ_STACK[peekNum - 1];
+    return { card: peekCard, position: peekNum };
 }
 
 function generateFlashCard(usedSet, topCard) {
