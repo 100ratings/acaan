@@ -430,6 +430,17 @@ body {
     touch-action: manipulation; /* Previne zoom duplo */
 }
 
+.kbd-hint {
+    margin-left: auto;
+    font-size: 0.75rem;
+    opacity: 0.6;
+    font-weight: 500;
+}
+
+.next-btn .kbd-hint {
+    color: rgba(255, 255, 255, 0.9);
+}
+
 .peek-btn {
     background: var(--bg-white);
     border: 1px solid var(--border-light);
@@ -489,10 +500,6 @@ body {
 
 /* Answer */
 .answer-container {
-    background: #f0fdf4;
-    border: 2px solid #86efac;
-    border-radius: var(--radius);
-    padding: 1.5rem;
     animation: slideInUp 0.3s ease;
 }
 
@@ -501,13 +508,22 @@ body {
 }
 
 .answer-box {
+    background: var(--bg-white);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
     text-align: center;
 }
 
 .answer-label {
-    font-size: 0.875rem;
-    color: var(--text-light);
-    font-weight: 500;
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    background: rgba(22, 163, 74, 0.10);
+    color: #166534;
+    font-size: 0.75rem;
+    font-weight: 700;
     margin-bottom: 0.75rem;
 }
 
@@ -688,11 +704,6 @@ body {
         flex-direction: column;
     }
 
-    .flashcard {
-        flex: 1;
-        max-height: 600px;
-    }
-
     /* Layout Desktop para Flashcard + Resposta Lateral */
     .main-layout {
         display: grid;
@@ -700,6 +711,13 @@ body {
         gap: 1.75rem;
         align-items: start;
         height: 100%;
+    }
+
+    .main-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        min-height: 0;
     }
 
     .side-panel {
@@ -713,6 +731,11 @@ body {
 
     .playing-card {
         min-height: 520px;
+        max-height: 600px;
+    }
+
+    #peekBtn, #nextBtn {
+        flex: 0 0 auto;
     }
 
     .answer-container {
