@@ -695,7 +695,8 @@ body {
         flex-direction: column;
         justify-content: flex-start;
         min-height: 0;
-        overflow: auto;
+        overflow-y: auto;
+        overflow-x: hidden;
     }
 
     .flashcard-container {
@@ -712,6 +713,8 @@ body {
         gap: 1.75rem;
         align-items: start;
         height: 100%;
+        width: 100%;
+        max-width: 100%;
     }
 
     .main-panel {

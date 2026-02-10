@@ -221,23 +221,18 @@ function generateNewFlashCard() {
         return;
     }
     
-    showLoading();
+    const newCard = generateFlashCard(usedSet, state.topCard);
     
-    // Simular delay para melhor UX
-    setTimeout(() => {
-        const newCard = generateFlashCard(usedSet, state.topCard);
-        
-        state.currentCard = newCard.card;
-        state.currentPosition = newCard.position;
-        state.correctCard = newCard.correctCard;
-        state.correctPosition = newCard.correctPosition;
-        state.usedCombinations = Array.from(usedSet);
-        
-        saveState();
-        updateProgress();
-        updateUI();
-        showFlashcard();
-    }, 100);
+    state.currentCard = newCard.card;
+    state.currentPosition = newCard.position;
+    state.correctCard = newCard.correctCard;
+    state.correctPosition = newCard.correctPosition;
+    state.usedCombinations = Array.from(usedSet);
+    
+    saveState();
+    updateProgress();
+    updateUI();
+    showFlashcard();
 }
 
 // ============================================================================
