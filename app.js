@@ -57,12 +57,9 @@ const elements = {
     topCardDisplay: document.getElementById("topCardDisplay"),
     cardModal: document.getElementById("cardModal"),
     modalCloseBtn: document.getElementById("modalCloseBtn"),
+    modalOverlay: document.getElementById("modalOverlay"),
+    cardGrid: document.getElementById("cardGrid"),
     
-    // Novos elementos do seletor
-    rankGrid: document.getElementById("rankGrid"),
-    suitGrid: document.getElementById("suitGrid"),
-    selectionPreview: document.getElementById("selectionPreview"),
-    confirmSelectionBtn: document.getElementById("confirmSelectionBtn"),
     
     cardEmoji: document.getElementById("cardEmoji"),
     cardName: document.getElementById("cardName"),
@@ -254,90 +251,41 @@ function showCompletion() {
 
 function openCardModal() {
     elements.cardModal.classList.remove("hidden");
-    resetSelectorUI();
+    renderCardGrid();
 }
 
 function closeCardModal() {
     elements.cardModal.classList.add("hidden");
 }
 
-// Variáveis temporárias para o seletor
-let tempRank = null;
-let tempSuit = null;
-
-const RANKS = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
-const SUITS = ["♣", "♥", "♠", "♦"];
-
-function resetSelectorUI() {
-    tempRank = null;
-    tempSuit = null;
-    updateSelectionPreview();
-    renderSelectorGrids();
-}
-
-function renderSelectorGrids() {
-    // Renderizar Ranks
-    elements.rankGrid.innerHTML = "";
-    RANKS.forEach(rank => {
-        const btn = document.createElement("button");
-        btn.className = "sel-btn rank-btn";
-        if (rank === tempRank) btn.classList.add("selected");
-        btn.textContent = rank;
-        btn.onclick = () => {
-            tempRank = rank;
-            renderSelectorGrids(); // Re-render para atualizar classe selected
-            updateSelectionPreview();
-        };
-        elements.rankGrid.appendChild(btn);
+function renderCardGrid() {
+    elements.cardGrid.innerHTML = "";
+    
+    TAMARIZ_STACK.forEach(card => {
+        const btn = document.createElement("div");
+        btn.className = "card-grid-item";
+        if (card === state.topCard) {
+            btn.classList.add("selected");
+        }
+        
+        btn.innerHTML = `
+            <div class="card-emoji">${card}</div>
+            <div class="card-label">${getCardName(card)}</div>
+        `;
+        
+        btn.addEventListener("click", () => {
+            state.topCard = card;
+            state.currentCard = null;
+            state.showAnswer = false;
+            
+            saveState();
+            
+            closeCardModal();
+            generateNewFlashCard();
+        });
+        
+        elements.cardGrid.appendChild(btn);
     });
-
-    // Renderizar Naipes
-    elements.suitGrid.innerHTML = "";
-    SUITS.forEach(suit => {
-        const btn = document.createElement("button");
-        btn.className = "sel-btn suit-btn";
-        if (suit === tempSuit) btn.classList.add("selected");
-        btn.textContent = suit;
-        btn.dataset.suit = suit; // Para cor vermelha no CSS
-        btn.onclick = () => {
-            tempSuit = suit;
-            renderSelectorGrids();
-            updateSelectionPreview();
-        };
-        elements.suitGrid.appendChild(btn);
-    });
-}
-
-function updateSelectionPreview() {
-    if (tempRank && tempSuit) {
-        const fullCard = tempRank + tempSuit;
-        elements.selectionPreview.textContent = fullCard + " - " + getCardName(fullCard);
-        elements.confirmSelectionBtn.disabled = false;
-    } else {
-        elements.selectionPreview.textContent = "--";
-        elements.confirmSelectionBtn.disabled = true;
-    }
-}
-
-function confirmSelection() {
-    if (!tempRank || !tempSuit) return;
-    
-    const newTopCard = tempRank + tempSuit;
-    
-    // Validar se existe na stack (segurança)
-    if (!TAMARIZ_STACK.includes(newTopCard)) {
-        alert("Erro: Carta inválida");
-        return;
-    }
-
-    state.topCard = newTopCard;
-    state.currentCard = null;
-    state.showAnswer = false;
-    
-    saveState(); // Salvar imediatamente a mudança de topo
-    
-    closeCardModal();
-    generateNewFlashCard();
 }
 
 // ============================================================================
@@ -346,7 +294,7 @@ function confirmSelection() {
 
 elements.cardSelectorBtn.addEventListener("click", openCardModal);
 elements.modalCloseBtn.addEventListener("click", closeCardModal);
-elements.confirmSelectionBtn.addEventListener("click", confirmSelection);
+elements.modalOverlay.addEventListener("click", closeCardModal);
 
 elements.peekBtn.addEventListener("click", () => {
     state.showAnswer = !state.showAnswer;
