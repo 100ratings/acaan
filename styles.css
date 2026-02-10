@@ -1,0 +1,546 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --secondary: #4f46e5;
+    --secondary-dark: #4338ca;
+    --success: #10b981;
+    --success-dark: #059669;
+    --bg-light: #f8fafc;
+    --bg-lighter: #f1f5f9;
+    --bg-white: #ffffff;
+    --text-dark: #1e293b;
+    --text-light: #64748b;
+    --border-light: #e2e8f0;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --radius: 0.65rem;
+}
+
+html, body {
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(to bottom right, var(--bg-light), #e0e7ff);
+    color: var(--text-dark);
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+#app {
+    width: 100%;
+    max-width: 600px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Header */
+.header {
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    font-size: 1.125rem;
+    color: var(--text-light);
+}
+
+/* Progress Card */
+.progress-card {
+    background: var(--bg-white);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.progress-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.progress-count {
+    font-size: 0.875rem;
+    color: var(--text-light);
+    font-family: 'Courier New', monospace;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 0.5rem;
+    background: var(--bg-lighter);
+    border-radius: 9999px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    transition: width 0.3s ease;
+    border-radius: 9999px;
+}
+
+.progress-percentage {
+    font-size: 0.75rem;
+    color: var(--text-light);
+}
+
+/* Card Selector */
+.card-selector-wrapper {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.card-selector-btn {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    background: var(--bg-white);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-dark);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.card-selector-btn:hover {
+    background: var(--bg-lighter);
+    border-color: var(--primary);
+}
+
+.selector-icon {
+    font-size: 1rem;
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    position: relative;
+    background: var(--bg-white);
+    border-radius: var(--radius);
+    max-width: 90vw;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+    padding: 1.5rem;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.modal-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-light);
+    transition: color 0.2s ease;
+}
+
+.modal-close:hover {
+    color: var(--text-dark);
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+    gap: 0.5rem;
+}
+
+.card-grid-item {
+    padding: 0.75rem;
+    background: var(--bg-lighter);
+    border: 2px solid transparent;
+    border-radius: var(--radius);
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.card-grid-item:hover {
+    background: var(--bg-light);
+    border-color: var(--primary);
+}
+
+.card-grid-item.selected {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary-dark);
+}
+
+.card-emoji {
+    font-size: 1.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.card-label {
+    font-size: 0.625rem;
+    opacity: 0.7;
+    margin-top: 0.25rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Flashcard */
+.flashcard-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.flashcard {
+    background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
+    border: 1px solid #c7d2fe;
+    border-radius: var(--radius);
+    padding: 3rem 2rem;
+    text-align: center;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+    box-shadow: var(--shadow-md);
+}
+
+.card-display {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.card-emoji {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--primary);
+    line-height: 1;
+}
+
+.card-name {
+    font-size: 1.125rem;
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+.number-display {
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--secondary);
+    font-family: 'Courier New', monospace;
+    line-height: 1;
+}
+
+/* Buttons */
+.peek-btn,
+.next-btn,
+.reset-btn,
+.reset-footer-btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.peek-btn {
+    background: var(--bg-white);
+    border: 1px solid var(--border-light);
+    color: var(--text-dark);
+}
+
+.peek-btn:hover {
+    background: var(--bg-lighter);
+    border-color: var(--primary);
+}
+
+.peek-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary-dark);
+}
+
+.next-btn {
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    color: white;
+}
+
+.next-btn:hover {
+    background: linear-gradient(to right, var(--primary-dark), var(--secondary-dark));
+    box-shadow: var(--shadow-md);
+}
+
+.reset-btn {
+    background: var(--primary);
+    color: white;
+}
+
+.reset-btn:hover {
+    background: var(--primary-dark);
+}
+
+.reset-footer-btn {
+    background: none;
+    border: none;
+    color: var(--text-light);
+    width: auto;
+    padding: 0.5rem;
+}
+
+.reset-footer-btn:hover {
+    color: var(--text-dark);
+}
+
+.peek-icon,
+.next-icon,
+.reset-icon {
+    font-size: 1rem;
+}
+
+/* Answer */
+.answer-container {
+    background: #f0fdf4;
+    border: 2px solid #86efac;
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    animation: slideInUp 0.3s ease;
+}
+
+.answer-container.hidden {
+    display: none;
+}
+
+.answer-box {
+    text-align: center;
+}
+
+.answer-label {
+    font-size: 0.875rem;
+    color: var(--text-light);
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+}
+
+.correct-card-emoji {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--success);
+    margin-bottom: 0.5rem;
+}
+
+.correct-card-name {
+    font-size: 1.125rem;
+    color: var(--text-dark);
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.answer-position {
+    font-size: 0.875rem;
+    color: var(--text-light);
+}
+
+.position-value {
+    font-weight: 600;
+    color: var(--success);
+}
+
+/* Loading State */
+.loading-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+}
+
+.loading-container.hidden {
+    display: none;
+}
+
+.loading-box {
+    background: var(--bg-white);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius);
+    padding: 2rem;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+}
+
+.loading-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.loading-text {
+    color: var(--text-light);
+}
+
+/* Completion State */
+.completion-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+}
+
+.completion-container.hidden {
+    display: none;
+}
+
+.completion-box {
+    background: var(--bg-white);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius);
+    padding: 2rem;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+}
+
+.completion-emoji {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.completion-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.completion-text {
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.info {
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--text-light);
+    margin-top: 1rem;
+}
+
+/* Animations */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .title {
+        font-size: 2rem;
+    }
+
+    .flashcard {
+        padding: 2rem 1.5rem;
+        min-height: 250px;
+    }
+
+    .card-emoji {
+        font-size: 2.5rem;
+    }
+
+    .number-display {
+        font-size: 3rem;
+    }
+
+    .correct-card-emoji {
+        font-size: 2rem;
+    }
+
+    .card-grid {
+        grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+    }
+}
