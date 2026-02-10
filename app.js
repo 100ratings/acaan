@@ -181,10 +181,16 @@ function updateUI() {
     if (!state.currentCard) return;
     
     elements.cardEmoji.textContent = state.currentCard;
+    const isRed = state.currentCard.includes('♥') || state.currentCard.includes('♦');
+    elements.cardEmoji.style.color = isRed ? 'var(--suit-red)' : 'var(--suit-black)';
+    
     elements.cardName.textContent = getCardName(state.currentCard);
     elements.numberDisplay.textContent = state.currentPosition;
     
     elements.correctCardEmoji.textContent = state.correctCard;
+    const isCorrectRed = state.correctCard.includes('♥') || state.correctCard.includes('♦');
+    elements.correctCardEmoji.style.color = isCorrectRed ? 'var(--suit-red)' : 'var(--suit-black)';
+    
     elements.correctCardName.textContent = getCardName(state.correctCard);
     
     const actualCorrectPosition = getCardPosition(state.correctCard, state.topCard);
@@ -332,9 +338,9 @@ function updateSelectorPreview() {
     if (selectorState.rank && selectorState.suit) {
         elements.selectorPreview.textContent = `${selectorState.rank}${selectorState.suit}`;
         if (selectorState.suit === "♥" || selectorState.suit === "♦") {
-            elements.selectorPreview.style.color = "#ef4444";
+            elements.selectorPreview.style.color = "var(--suit-red)";
         } else {
-            elements.selectorPreview.style.color = "var(--primary)";
+            elements.selectorPreview.style.color = "var(--suit-black)";
         }
     } else if (selectorState.rank) {
         elements.selectorPreview.textContent = `${selectorState.rank} ?`;
@@ -342,7 +348,7 @@ function updateSelectorPreview() {
     } else if (selectorState.suit) {
         elements.selectorPreview.textContent = `? ${selectorState.suit}`;
         if (selectorState.suit === "♥" || selectorState.suit === "♦") {
-            elements.selectorPreview.style.color = "#ef4444";
+            elements.selectorPreview.style.color = "var(--suit-red)";
         } else {
             elements.selectorPreview.style.color = "var(--text-dark)";
         }
