@@ -42,6 +42,7 @@ const state = {
     correctCard: null,
     correctPosition: null,
     showAnswer: false,
+    voiceEnabled: false,
     totalAvailable: 52 * 52 // 2704 combinações
 };
 
@@ -69,6 +70,7 @@ const elements = {
     cardName: document.getElementById("cardName"),
     numberDisplay: document.getElementById("numberDisplay"),
     
+    voiceBtn: document.getElementById("voiceBtn"),
     peekBtn: document.getElementById("peekBtn"),
     peekBtnText: document.getElementById("peekBtnText"),
     answerContainer: document.getElementById("answerContainer"),
@@ -144,6 +146,54 @@ function generateFlashCard(usedSet, topCard) {
         correctCard: correctData.card,
         correctPosition: correctData.position
     };
+}
+
+function normalizeRankToPT(card) {
+    // card = "6♥" etc
+    const rank = card.slice(0, -1); // "6", "10", "K"
+    const map = { A: "Ás", J: "Valete", Q: "Dama", K: "Rei" };
+    return map[rank] || rank;
+}
+
+function suitToPT(card) {
+    const suit = card.slice(-1);
+    if (suit === "♥") return "Copas";
+    if (suit === "♦") return "Ouros";
+    if (suit === "♣") return "Paus";
+    if (suit === "♠") return "Espadas";
+    return "";
+}
+
+function speakPT(text) {
+    if (!("speechSynthesis" in window)) return;
+
+    // cancela fala anterior (evita sobreposição quando troca rápido)
+    window.speechSynthesis.cancel();
+
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "pt-BR";
+    u.rate = 1.0;
+    u.pitch = 1.0;
+    u.volume = 1.0;
+
+    // tenta pegar uma voz pt-BR/pt-PT se existir
+    const voices = window.speechSynthesis.getVoices?.() || [];
+    const ptVoice = voices.find(v => (v.lang || "").toLowerCase().startsWith("pt"));
+    if (ptVoice) u.voice = ptVoice;
+
+    window.speechSynthesis.speak(u);
+}
+
+function speakCurrentCardAndPosition() {
+    if (!state.voiceEnabled) return;
+    if (!state.currentCard || !state.currentPosition) return;
+
+    const rankPT = normalizeRankToPT(state.currentCard);
+    const suitPT = suitToPT(state.currentCard);
+
+    // Ex: "Seis de Copas, posição dezessete" (número fica como dígito mesmo — ok)
+    const text = `${rankPT} de ${suitPT}, posição ${state.currentPosition}`;
+    speakPT(text);
 }
 
 function loadState() {
@@ -233,6 +283,7 @@ function generateNewFlashCard() {
     updateProgress();
     updateUI();
     showFlashcard();
+    speakCurrentCardAndPosition();
 }
 
 // ============================================================================
@@ -369,6 +420,17 @@ function updateSelectorPreview() {
 elements.cardSelectorBtn.addEventListener("click", openCardModal);
 elements.modalCloseBtn.addEventListener("click", closeCardModal);
 elements.modalOverlay.addEventListener("click", closeCardModal);
+
+elements.voiceBtn.addEventListener("click", () => {
+    state.voiceEnabled = !state.voiceEnabled;
+
+    elements.voiceBtn.classList.toggle("active", state.voiceEnabled);
+    elements.voiceBtn.setAttribute("aria-pressed", String(state.voiceEnabled));
+    elements.voiceBtn.textContent = state.voiceEnabled ? "🔊 Voz: On" : "🔊 Voz: Off";
+
+    // se ligou agora, fala a carta atual imediatamente
+    if (state.voiceEnabled) speakCurrentCardAndPosition();
+});
 
 elements.peekBtn.addEventListener("click", () => {
     state.showAnswer = !state.showAnswer;

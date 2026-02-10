@@ -414,6 +414,7 @@ body {
 .peek-btn,
 .next-btn,
 .reset-btn,
+.voice-btn,
 .reset-footer-btn {
     padding: 0.75rem 1.5rem;
     border: none;
@@ -439,6 +440,23 @@ body {
 
 .next-btn .kbd-hint {
     color: rgba(255, 255, 255, 0.9);
+}
+
+.voice-btn {
+    background: var(--bg-white);
+    border: 1px solid var(--border-light);
+    color: var(--text-dark);
+}
+
+.voice-btn:hover {
+    background: var(--bg-lighter);
+    border-color: var(--primary);
+}
+
+.voice-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary-dark);
 }
 
 .peek-btn {
