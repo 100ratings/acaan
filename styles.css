@@ -713,8 +713,7 @@ body {
         flex-direction: column;
         justify-content: flex-start;
         min-height: 0;
-        overflow-y: auto;
-        overflow-x: hidden;
+        overflow: hidden;
     }
 
     .flashcard-container {
@@ -752,11 +751,9 @@ body {
     }
 
     .playing-card {
-        min-height: 520px;
-        max-height: 600px;
         flex: 1 1 auto;
         min-height: 0;
-        height: clamp(420px, 52vh, 620px);
+        height: clamp(380px, 48vh, 560px);
     }
 
     #peekBtn, #nextBtn {
